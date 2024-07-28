@@ -9,8 +9,15 @@ export default function App() {
   async function inserirDados() {
 
     await firebase.auth().createUserWithEmailAndPassword(email, pass)
-      .then(() => {
-        alert('Usuário cadastrado em nosso banco de dados.')
+      .then((value) => {
+
+        alert(value.user.uid)
+
+        firebase.database().ref('usuarios').child(value.user.uid).set({
+          email: email,
+          uid: value.user.uid,
+          password: pass
+        })
       }).catch((error) => {
         if (error.code === 'auth/weak-password') {
           alert('Senha fraca, tem que ter pelo menos 6 caracteres')
